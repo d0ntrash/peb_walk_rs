@@ -33,7 +33,7 @@ fn get_module_base_addr(module_name: &str) -> HINSTANCE {
         let mut p_list_entry = (*peb.Ldr).InMemoryOrderModuleList.Flink;
 
         loop {
-            // Reading more from buffer since lenght is not correct
+            // Reading to much from buffer since lenght is not correct
             // No idea why though. Probably dont need to care about that, right?
             let buffer = std::slice::from_raw_parts(
                 (*p_ldr_data_table_entry).FullDllName.Buffer, 
