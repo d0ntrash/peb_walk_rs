@@ -1,0 +1,21 @@
+[package]
+name = "peb_walk_rs"
+version = "0.1.0"
+edition = "2021"
+authors = ["d0ntrash @d0ntrash"]
+description = "Dynamically resolve and invoke Windows APIs using Rust"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies.windows-sys]
+version = "0.36.1"
+features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_System_Threading",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Kernel",
+    "Win32_System_WindowsProgramming",
+    "Win32_System_SystemServices",
+    "Win32_System_Diagnostics_Debug"
+]

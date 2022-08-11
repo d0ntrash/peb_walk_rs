@@ -1,0 +1,31 @@
+#+TITLE: peb_walk_rs
+#+AUTHOR: d0ntrash
+** About
+   Dynamically resolve and invoke Windows APIs using Rust. This might help to avoid suspicious imports and the usage of GetProcAddress.
+** Example
+   #+BEGIN_SRC rust
+     use peb_walk_rs;
+     use windows_sys::Win32::Foundation::*;
+     use windows_sys::Win32::UI::WindowsAndMessaging::MB_OK;
+
+     fn main() {
+         unsafe {
+             println!("[+] Getting base address of kernel32.dll");
+             let kernel32_base_address: HINSTANCE = peb_walk_rs::get_module_base_addr("kernel32.dll");
+
+             println!("[+] Dynamically resolving LoadLibraryA");
+             let dn_load_library_a: peb_walk_rs::LoadLibraryA = std::mem::transmute(peb_walk_rs::get_proc_addr(kernel32_base_address, "LoadLibraryA"));
+
+             println!("[+] Load user32.dll");
+             dn_load_library_a("user32.dll\0".as_ptr());
+
+             println!("[+] Getting base address of user32.dll");
+             let user32_base_address: HINSTANCE = peb_walk_rs::get_module_base_addr("user32.dll");
+
+             println!("[+] Dynamically resolve MessageBoxA");
+             let dn_message_box_a: peb_walk_rs::MessageBoxA = std::mem::transmute(peb_walk_rs::get_proc_addr(user32_base_address, "MessageBoxA"));
+
+             dn_message_box_a(0, "Resolved dynamically\0".as_ptr(), "MessageBoxA\0".as_ptr(), MB_OK);
+         }
+     }
+   #+END_SRC
