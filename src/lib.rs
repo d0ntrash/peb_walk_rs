@@ -75,12 +75,12 @@ pub fn get_proc_addr(module_handle: HINSTANCE, function_name: &str) -> FARPROC {
             ).to_str().unwrap();
 
             if current_function_name == function_name {
-                address_array = address_array + (*(name_ordinals as *const u16) as u64 * (std::mem::size_of::<types::DWORD>() as u64));
+                address_array += *(name_ordinals as *const u16) as u64 * (std::mem::size_of::<types::DWORD>() as u64);
                 let fun_addr: FARPROC = std::mem::transmute(module_handle as u64 + *(address_array as *const u32) as u64);
                 return fun_addr;
             }
-            name_array = name_array + std::mem::size_of::<types::DWORD>() as u64;
-            name_ordinals = name_ordinals + std::mem::size_of::<u16>() as u64;
+            name_array += std::mem::size_of::<types::DWORD>() as u64;
+            name_ordinals += std::mem::size_of::<u16>() as u64;
         }
     }
 }
